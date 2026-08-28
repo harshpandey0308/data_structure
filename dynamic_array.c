@@ -13,20 +13,21 @@ void init(Dynamicarray *arr , size_t capacity){
     }
 }
 
-void insert_at(int arr[] , size_t size , size_t capacity , size_t index , int data){
-    if(size == capacity){
+void insert_at(int arr[] , size_t *size , size_t *capacity , size_t index , int data){
+    printf("insertion starts.\n");
+    if(*size == *capacity){
         perror("Array is full.");
         exit(EXIT_FAILURE);
     }
 
-
-    if(index > size){
+    if(index > *size){
         perror("Invalid index");
         exit(EXIT_FAILURE);
     }
     else{
-        if(index < size){
-            for(int j=size-1 ; j>=index ; j--){
+        if(index < *size){
+            printf("shifting happens.\n");
+            for(int j=*(size)-1 ; j>=index ; j--){
                 arr[j+1] = arr[j];
             }
             arr[index] = data;
@@ -34,7 +35,7 @@ void insert_at(int arr[] , size_t size , size_t capacity , size_t index , int da
         else{
             arr[index] = data;
         }
-        size++;
+        (*size)++;
     }
     
 
@@ -45,14 +46,19 @@ int main(){
 
     init(&arr , 15);
 
-    insert_at(arr.data , arr.size , arr.capacity , 0 , 76);
-    insert_at(arr.data , arr.size , arr.capacity , 0 , 34);
+    insert_at(arr.data , &arr.size , &arr.capacity , 0 , 76);
+    printf("size : %d.\n",arr.size);
+
+    insert_at(arr.data , &arr.size , &arr.capacity , 1 , 34);
+    insert_at(arr.data , &arr.size , &arr.capacity , 1 , 18);
+    insert_at(arr.data , &arr.size , &arr.capacity , 1 , 24);
 
     printf("size : %d.\n",arr.size);
 
     
     printf("arr[0] : %d.\n",arr.data[0]);
     printf("arr[1] : %d.\n",arr.data[1]);
+    printf("arr[2] : %d.\n",arr.data[2]);
 
 
 }
