@@ -41,6 +41,29 @@ void insert_at(int arr[] , size_t *size , size_t *capacity , size_t index , int 
 
 }
 
+void pop_back(int arr[] , size_t *size , size_t *capacity){
+    printf("size = %d.\n",*size);
+    if(*size == 0){
+        printf("the array is underflow , can't pop any element .\n");
+        return;
+    }
+
+    (*size)--;
+    printf("size = %d.\n",*size);
+    printf("The element is pop out of the array.\n");
+
+}
+
+int get(int arr[] , size_t *size , size_t *capacity , size_t index){
+    if(index > *size){
+        printf("INVALID index.\n");
+        return -1;
+    }
+    
+    return arr[index];
+
+}
+
 int main(){
     Dynamicarray arr;
 
@@ -55,10 +78,17 @@ int main(){
 
     printf("size : %d.\n",arr.size);
 
+    int val = get(arr.data , &arr.size , &arr.capacity , 1);
+    printf("value = %d.\n",val);
+
+    pop_back(arr.data , &arr.size , &arr.capacity);
+
+    printf("size : %d.\n",arr.size);
+
     
-    printf("arr[0] : %d.\n",arr.data[0]);
-    printf("arr[1] : %d.\n",arr.data[1]);
-    printf("arr[2] : %d.\n",arr.data[2]);
+    for(int i=0 ; i<arr.size ; i++){
+        printf("arr[%d] = %d.\n",i , arr.data[i]);
+    }
 
 
 }
