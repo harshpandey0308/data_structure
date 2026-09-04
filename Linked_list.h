@@ -15,12 +15,12 @@ typedef struct STACk{
 
 void stack_init(STACK *s);
 
-bool push(STACK *stack , int data);
+void push(STACK *stack , int data);
 
 bool pop(STACK *stack);
 
 bool is_empty(const STACK *s);
 
-bool is_full(const STACK *s);
+int peek(const STACK *s);
 
 #endif

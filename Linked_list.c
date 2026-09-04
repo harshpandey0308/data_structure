@@ -7,20 +7,62 @@ void stack_init(STACK *s){
     s->top = NULL;
 }
 
-NODE *create_node(NODE *p){
-    p = malloc(sizeof(NODE));
+NODE *create_node(){
+    NODE *p = malloc(sizeof(NODE));
     p->next = NULL;
     return p;
 }
 
-bool push(STACK *s , int data){
+void push(STACK *s , int data){
+    NODE *temp = create_node();
+    temp->data = data;
+    
     if(s->top == NULL){
-        stack_init(s);
-        s->node = create_node(s);
-        s->node->data = data;
-        s->node->next = NULL;
-        s->top = s->node;
-        return 1;
+        s->node = temp;
+        s->top = temp;
+        return;
     }
 
+    temp->next = s->node;
+    s->node = temp;
+    s->top = temp;
+
+}
+
+bool is_empty(const STACK *s){
+    if(s->top == NULL){
+        return 1;
+    }
+    return 0;
+}
+
+int peek(const STACK *s){
+    if(is_empty(s)){
+        printf("stack is empty.\n");
+        return -1;
+    }
+    return s->top->data;
+}
+
+int main(){
+    STACK s;
+
+    stack_init(&s);
+
+    int arr[] = {4 , 5 , 23 , 90 , 34};
+
+    for(int i=0 ; i<5 ; i++){
+        push(&s , arr[i]);
+    }
+
+    NODE *temp = s.top;
+    while(temp != NULL){
+        printf("NODE -> %d.\n",temp->data);
+        temp = temp->next;
+    }
+
+    int value = peek(&s);
+    printf("value at the top is %d.\n",value);
+
+    return 0;
 }
