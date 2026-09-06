@@ -44,25 +44,3 @@ int peek(const STACK *s){
     return s->top->data;
 }
 
-int main(){
-    STACK s;
-
-    stack_init(&s);
-
-    int arr[] = {4 , 5 , 23 , 90 , 34};
-
-    for(int i=0 ; i<5 ; i++){
-        push(&s , arr[i]);
-    }
-
-    NODE *temp = s.top;
-    while(temp != NULL){
-        printf("NODE -> %d.\n",temp->data);
-        temp = temp->next;
-    }
-
-    int value = peek(&s);
-    printf("value at the top is %d.\n",value);
-
-    return 0;
-}
