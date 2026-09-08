@@ -9,7 +9,6 @@ typedef struct NODE{
 }NODE;
 
 typedef struct STACk{
-    NODE *node;
     NODE *top;
 }STACK;
 
@@ -17,7 +16,7 @@ void stack_init(STACK *s);
 
 void push(STACK *stack , int data);
 
-bool pop(STACK *stack);
+int pop(STACK *stack);
 
 bool is_empty(const STACK *s);
 

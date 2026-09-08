@@ -18,15 +18,31 @@ void push(STACK *s , int data){
     temp->data = data;
     
     if(s->top == NULL){
-        s->node = temp;
         s->top = temp;
         return;
     }
 
-    temp->next = s->node;
-    s->node = temp;
+    temp->next = s->top;
     s->top = temp;
 
+}
+
+int pop(STACK *s){
+    if(s->top == NULL){
+        return -1;
+    }
+    NODE *temp = s->top;
+    int val = temp->data;
+    s->top = temp->next;
+    if(s->top != NULL){
+        printf("top = %d.\n",s->top->data);
+    }
+    else{
+        printf("stack is empty.\n");
+    }
+    
+    free(temp);
+    return val;
 }
 
 bool is_empty(const STACK *s){
