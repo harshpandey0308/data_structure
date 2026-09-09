@@ -1,4 +1,6 @@
 #include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
 #include<ctype.h>
 #include"Linked_list.h"
 
@@ -6,22 +8,64 @@ int evaluate(int op1 , int op2 , char opr){
     if(opr == '+') return op1 + op2;
     else if(opr == '-') return op1 - op2;
     else if(opr == '*') return op1 * op2;
-    else if(opr == '/') return op1 / op2;
+    else if(opr == '/'){
+        if(op1 > op2){
+            return op1/op2;
+        }
+        else{
+            return op2/op1;
+        }
+    }
 
 }
 
-int postfix_evaluation(STACK *s , char *exp){
-    int n = sizeof(exp)/sizeof(exp[0]);
+int infix_eval(STACK *s , char *exp){
+    int n = strlen(exp);
+
     for(int i=0 ; i<n ; i++){
         if(isdigit(exp[i])){
-            int data = exp[i] - '0';
-            printf("data pushed into the stack : %d.\n",data);
+            int j=i+1;
+            int data;
+            int count = 1;
+            int new[count];
+            new[0] = exp[i];
+            while(exp[j] != ' '){
+                sprintf(new , "%c", exp[j]);
+                count++;
+            }
+            if(strlen(new) > 1){
+                data = atoi(new);
+            }
+            else{
+                data = new[0] - '0';
+            }
+        }
+    }
+}
+
+int postfix_evaluation(STACK *s , char *exp){
+    int a = strlen(exp);
+    
+    for(int i=0 ; i<a ; i++){
+        if(isdigit(exp[i])){
+            char new[3];
+            int data;
+            if(isdigit(exp[i+1])){
+                sprintf(new , "%c%c" , exp[i] , exp[i+1]);
+                data = atoi(new);
+                i++;
+            }
+            else{
+                data = exp[i] - '0';
+            }
+            
             push(s , data);
             NODE *temp = s->top;
             while(temp != NULL){
                 printf("value = %d.\n",temp->data);
                 temp = temp->next;
             }
+            
             //pop(s);
         }
         else if(exp[i] == '+' || exp[i] == '-' || exp[i] == '*' || exp[i] == '/'){
@@ -41,6 +85,9 @@ int postfix_evaluation(STACK *s , char *exp){
             printf("result = %d.\n",result);
             push(s , result);
         }
+        else if(exp[i] == ' '){
+            continue;
+        }
         
     }
     return s->top->data;
@@ -51,7 +98,7 @@ int main(){
 
     stack_init(&s);
 
-    char *exp = "342*+";
+    char *exp = "15 20 + 5 /";
 
     int val = postfix_evaluation(&s , exp);
 
