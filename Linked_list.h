@@ -4,7 +4,11 @@
 #include<stdbool.h>
 
 typedef struct NODE{
-    int data;
+    union data{
+        int i_data;
+        char c_data;
+        float f_data;
+    }data;
     struct NODE *next;
 }NODE;
 
@@ -14,7 +18,7 @@ typedef struct STACk{
 
 void stack_init(STACK *s);
 
-void push(STACK *stack , int data);
+void push(STACK *stack , void *data);
 
 int pop(STACK *stack);
 

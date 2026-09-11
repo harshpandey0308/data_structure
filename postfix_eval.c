@@ -19,30 +19,6 @@ int evaluate(int op1 , int op2 , char opr){
 
 }
 
-int infix_eval(STACK *s , char *exp){
-    int n = strlen(exp);
-
-    for(int i=0 ; i<n ; i++){
-        if(isdigit(exp[i])){
-            int j=i+1;
-            int data;
-            int count = 1;
-            int new[count];
-            new[0] = exp[i];
-            while(exp[j] != ' '){
-                sprintf(new , "%c", exp[j]);
-                count++;
-            }
-            if(strlen(new) > 1){
-                data = atoi(new);
-            }
-            else{
-                data = new[0] - '0';
-            }
-        }
-    }
-}
-
 int postfix_evaluation(STACK *s , char *exp){
     int a = strlen(exp);
     
