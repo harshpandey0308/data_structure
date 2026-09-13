@@ -3,12 +3,11 @@
 
 #include<stdbool.h>
 
+#define MAX_SIZE 10
+
+
 typedef struct NODE{
-    union data{
-        int i_data;
-        char c_data;
-        float f_data;
-    }data;
+    void *data;
     struct NODE *next;
 }NODE;
 
@@ -20,7 +19,7 @@ void stack_init(STACK *s);
 
 void push(STACK *stack , void *data);
 
-int pop(STACK *stack);
+bool pop(STACK *stack , void *data);
 
 bool is_empty(const STACK *s);
 

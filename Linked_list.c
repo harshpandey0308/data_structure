@@ -13,7 +13,7 @@ NODE *create_node(){
     return p;
 }
 
-void push(STACK *s , int data){
+void push(STACK *s , void *data){
     NODE *temp = create_node();
     temp->data = data;
     
@@ -27,22 +27,25 @@ void push(STACK *s , int data){
 
 }
 
-int pop(STACK *s){
+bool pop(STACK *s , void *data){
     if(s->top == NULL){
-        return -1;
+        return false;
     }
     NODE *temp = s->top;
-    int val = temp->data;
+    
+    data = &(temp->data);
+    
     s->top = temp->next;
     if(s->top != NULL){
         printf("top = %d.\n",s->top->data);
     }
     else{
         printf("stack is empty.\n");
+        return false;
     }
     
     free(temp);
-    return val;
+    return true;
 }
 
 bool is_empty(const STACK *s){

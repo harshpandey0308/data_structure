@@ -6,18 +6,18 @@
 #include"infix_eval.h"
 #include"Linked_list.h"
 
-int evaluate_exp(int a , int b , char *opr){
+int evaluate_exp(int *a , int *b , char *opr){
     if(strcmp(opr, "+") == 0){
-        return a + b;
+        return (*a) + (*b);
     }
     else if(strcmp(opr , "-") == 0){
-        return a - b;
+        return (*a) - (*b);
     }
     else if(strcmp(opr , "*") == 0){
-        return a*b;
+        return (*a)*(*b);
     }
     else if(strcmp(opr , "/") == 0){
-        return b/a;
+        return (*b)/(*a);
     }
 }
 
@@ -51,10 +51,14 @@ int infix_evaluation(STACK *s , STACK *y , char *exp){
         }
         else if(exp[i] == ')'){
             int result = 0;
-            int val1 = pop(s);
-            int val2 = pop(s);
-            char *opr1 = pop(y);
-            char *opr2 = pop(y);
+            char *opr1;
+            char *opr2;
+            int *val1;
+            int *val2;
+            pop(s , val1);
+            pop(s , val2);
+            pop(y , opr1);
+            pop(y , opr2);
 
             if(opr1 == NULL){
                 perror("No operations left.");
@@ -73,7 +77,7 @@ int infix_evaluation(STACK *s , STACK *y , char *exp){
                 result = evaluate_exp(val1 , val2 , opr2);
             }
             else if(precedence_flag == -1){
-                result = evalauate_exp(val1 , val2 , opr2);
+                result = evaluate_exp(val1 , val2 , opr2);
                 push(y , opr1);
             }
 
@@ -81,8 +85,9 @@ int infix_evaluation(STACK *s , STACK *y , char *exp){
         }
 
     }
+    int *val = s->top->data;
 
-    return s->top->data.i_data;
+    return *val;
 }
 
 int main(){
