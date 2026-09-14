@@ -5,9 +5,15 @@
 
 #define MAX_SIZE 10
 
+typedef enum{
+    INT , 
+    FLOAT,
+    CHAR
+}Type;
 
 typedef struct NODE{
     void *data;
+    Type data_type;
     struct NODE *next;
 }NODE;
 
@@ -17,12 +23,12 @@ typedef struct STACk{
 
 void stack_init(STACK *s);
 
-void push(STACK *stack , void *data);
+void push(STACK *stack , void *data , Type datatype);
 
-bool pop(STACK *stack , void *data);
+void *pop(STACK *stack , void *data);
 
 bool is_empty(const STACK *s);
 
-int peek(const STACK *s);
+void *peek(const STACK *s);
 
 #endif

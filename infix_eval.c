@@ -41,13 +41,13 @@ int infix_evaluation(STACK *s , STACK *y , char *exp){
 
     for(int i=0 ; i<n ; i++){
         if(isdigit(exp[i])){
-            push(s,&exp[i]);
+            push(s,&exp[i] , INT);
         }
         else if(exp[i] == '+' || exp[i] == '-' || exp[i] == '*' || exp[i] == '/'){
-            push(y , &exp[i]);
+            push(y , &exp[i] , INT);
         }
         else if(exp[i] == '('){
-            push(y , &exp[i]);
+            push(y , &exp[i] , INT);
         }
         else if(exp[i] == ')'){
             int result = 0;
@@ -55,10 +55,10 @@ int infix_evaluation(STACK *s , STACK *y , char *exp){
             char *opr2;
             int *val1;
             int *val2;
-            pop(s , val1);
-            pop(s , val2);
-            pop(y , opr1);
-            pop(y , opr2);
+            val1 = (int *)pop(s , val1);
+            val2 = (int *)pop(s , val2);
+            opr1 = (char *)pop(y , opr1);
+            opr2 = (char *)pop(y , opr2);
 
             if(opr1 == NULL){
                 perror("No operations left.");
@@ -78,16 +78,15 @@ int infix_evaluation(STACK *s , STACK *y , char *exp){
             }
             else if(precedence_flag == -1){
                 result = evaluate_exp(val1 , val2 , opr2);
-                push(y , opr1);
             }
 
-            push(s , &result);
+            push(s , &result , INT);
         }
 
     }
-    int *val = s->top->data;
+    int val = *((int *)s->top->data);
 
-    return *val;
+    return val;
 }
 
 int main(){

@@ -35,7 +35,7 @@ int postfix_evaluation(STACK *s , char *exp){
                 data = exp[i] - '0';
             }
             
-            push(s , data);
+            push(s , data , INT);
             NODE *temp = s->top;
             while(temp != NULL){
                 printf("value = %d.\n",temp->data);

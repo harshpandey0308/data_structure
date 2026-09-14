@@ -13,9 +13,10 @@ NODE *create_node(){
     return p;
 }
 
-void push(STACK *s , void *data){
+void push(STACK *s , void *data , Type datatype){
     NODE *temp = create_node();
     temp->data = data;
+    temp->data_type = datatype;
     
     if(s->top == NULL){
         s->top = temp;
@@ -27,25 +28,31 @@ void push(STACK *s , void *data){
 
 }
 
-bool pop(STACK *s , void *data){
+void *pop(STACK *s , void *data){
     if(s->top == NULL){
-        return false;
+        return NULL;
     }
     NODE *temp = s->top;
     
-    data = &(temp->data);
+    data = temp->data;
     
     s->top = temp->next;
-    if(s->top != NULL){
-        printf("top = %d.\n",s->top->data);
-    }
-    else{
-        printf("stack is empty.\n");
-        return false;
-    }
     
-    free(temp);
-    return true;
+    if(temp->data_type == INT){
+        int *val = data;
+        free(temp);
+        return val;
+    }
+    else if(temp->data_type == CHAR){
+        char *val = data;
+        free(temp);
+        return val;
+    }
+    else if(temp->data_type == FLOAT){
+        float *val = data;
+        free(temp);
+        return val;
+    }
 }
 
 bool is_empty(const STACK *s){
@@ -55,11 +62,23 @@ bool is_empty(const STACK *s){
     return 0;
 }
 
-int peek(const STACK *s){
+void *peek(const STACK *s){
     if(is_empty(s)){
         printf("stack is empty.\n");
-        return -1;
+        return NULL;
     }
-    return s->top->data;
+    if(s->top->data_type == INT){
+        int *value = s->top->data;
+        return value;
+    }
+    else if(s->top->data_type == CHAR){
+        char *value = s->top->data;
+        return value;
+    }
+    else if(s->top->data_type == FLOAT){
+        float *value = s->top->data;
+        return value;     
+    }
+
 }
 
