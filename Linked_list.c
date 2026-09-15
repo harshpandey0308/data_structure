@@ -15,9 +15,21 @@ NODE *create_node(){
 
 void push(STACK *s , void *data , Type datatype){
     NODE *temp = create_node();
-    temp->data = data;
     temp->data_type = datatype;
-    
+
+    if(datatype == INT){
+        temp->data = malloc(sizeof(int));
+        *(int *)temp->data = *(int *)data;
+    }
+    else if(datatype == CHAR){
+        temp->data = malloc(sizeof(char));
+        *(char *)temp->data = *(char *)data;
+    }
+    else if(datatype == FLOAT){
+        temp->data = malloc(sizeof(float));
+        *(float *)temp->data = *(float *)data;
+    }
+
     if(s->top == NULL){
         s->top = temp;
         return;
@@ -38,21 +50,9 @@ void *pop(STACK *s , void *data){
     
     s->top = temp->next;
     
-    if(temp->data_type == INT){
-        int *val = data;
-        free(temp);
-        return val;
-    }
-    else if(temp->data_type == CHAR){
-        char *val = data;
-        free(temp);
-        return val;
-    }
-    else if(temp->data_type == FLOAT){
-        float *val = data;
-        free(temp);
-        return val;
-    }
+    free(temp);
+
+    return data;
 }
 
 bool is_empty(const STACK *s){
@@ -67,18 +67,10 @@ void *peek(const STACK *s){
         printf("stack is empty.\n");
         return NULL;
     }
-    if(s->top->data_type == INT){
-        int *value = s->top->data;
-        return value;
-    }
-    else if(s->top->data_type == CHAR){
-        char *value = s->top->data;
-        return value;
-    }
-    else if(s->top->data_type == FLOAT){
-        float *value = s->top->data;
-        return value;     
-    }
+    
+    void *value = s->top;
+
+    return value;
 
 }
 
