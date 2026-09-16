@@ -9,6 +9,12 @@ void stack_init(STACK *s){
 
 NODE *create_node(){
     NODE *p = malloc(sizeof(NODE));
+    if(p == NULL){
+        perror("malloc allocation failed.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    p->data = NULL;
     p->next = NULL;
     return p;
 }
@@ -30,6 +36,12 @@ void push(STACK *s , void *data , Type datatype){
         *(float *)temp->data = *(float *)data;
     }
 
+    if(temp->data == NULL){
+        free(temp);
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
+
     if(s->top == NULL){
         s->top = temp;
         return;
@@ -40,13 +52,13 @@ void push(STACK *s , void *data , Type datatype){
 
 }
 
-void *pop(STACK *s , void *data){
+void *pop(STACK *s){
     if(s->top == NULL){
         return NULL;
     }
     NODE *temp = s->top;
     
-    data = temp->data;
+    void *data = temp->data;
     
     s->top = temp->next;
     
@@ -68,7 +80,7 @@ void *peek(const STACK *s){
         return NULL;
     }
     
-    void *value = s->top;
+    void *value = s->top->data;
 
     return value;
 

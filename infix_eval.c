@@ -7,16 +7,16 @@
 #include"Linked_list.h"
 
 int evaluate_exp(int *a , int *b , char *opr){
-    if(strcmp(opr, "+") == 0){
+    if(*opr == '+'){
         return (*a) + (*b);
     }
-    else if(strcmp(opr , "-") == 0){
-        return (*a) - (*b);
+    else if(*opr == '-'){
+        return (*b) - (*a);
     }
-    else if(strcmp(opr , "*") == 0){
+    else if(*opr == '*'){
         return (*a)*(*b);
     }
-    else if(strcmp(opr , "/") == 0){
+    else if(*opr == '/'){
         return (*b)/(*a);
     }
 }
@@ -36,22 +36,17 @@ int infix_evaluation(STACK *s , STACK *y , char *exp){
 
     int result = 0;
     char *opr1 = malloc(sizeof(char));
-    char *opr2 = malloc(sizeof(char));
     int *val1 = malloc(sizeof(int));
     int *val2 = malloc(sizeof(int));
 
     for(int i=0 ; i<n ; i++){
         if(isdigit(exp[i])){
-            int data;
-            char new[3];
-            if(isdigit(exp[i+1])){
-                sprintf(new , "%c%c" , exp[i] , exp[i+1]);
-                data = atoi(new);
+            int data = 0;
+            while(isdigit(exp[i])){
+                data = data*10 + (exp[i] - '0');
                 i++;
             }
-            else{
-                data = exp[i] - '0';
-            }
+            i--;
             
             push(s, &data , INT);
         }
@@ -60,16 +55,15 @@ int infix_evaluation(STACK *s , STACK *y , char *exp){
                push(y , &exp[i] , CHAR);
             }
             else{
-                void *ch_data;
-                *(char *)ch_data = *(char *)peek(y);
-                if(precedence(exp[i]) > precedence(*ch_data)){
+                char ch_data = *(char *)peek(y);
+                if(precedence(exp[i]) > precedence(ch_data)){
                     push(y , &exp[i] , CHAR);
                 }
                 else{
-                    *val1 = *(int *)pop(s);
-                    *val2 = *(int *)pop(s);
-                    *opr1 = *(char *)pop(y);
-                    result = evaluate_exp(val1 , val2 , opr1)
+                    val1 = (int *)pop(s);
+                    val2 = (int *)pop(s);
+                    opr1 = (char *)pop(y);
+                    result = evaluate_exp(val1 , val2 , opr1);
                     push(s , &result , INT);
 
                     push(y , &exp[i] , CHAR);
@@ -81,18 +75,34 @@ int infix_evaluation(STACK *s , STACK *y , char *exp){
             push(y , &exp[i] , CHAR);
         }
         else if(exp[i] == ')'){
-            while(*(char *)y->top->data != "("){
-                *val1 = *(int *)pop(s);
-                *val2 = *(int *)pop(s);
-                *opr1 = *(char *)pop(y);
+            while(*(char *)y->top->data != '('){
+                val1 = (int *)pop(s);
+                val2 = (int *)pop(s);
+                opr1 = (char *)pop(y);
                 result = evaluate_exp(val1 , val2 , opr1);
 
                 push(s , &result , INT);
-                pop(y);
+                
             }
+            pop(y);
         }
 
     }
+
+    while(!is_empty(y)){
+        val1 = (int *)pop(s);
+        val2 = (int *)pop(s);
+        opr1 = (char *)pop(y);
+
+        result = evaluate_exp(val1 , val2 , opr1);
+
+        push(s , &result , INT);
+    }
+
+    free(val1);
+    free(val2);
+    free(opr1);
+
     int val = *((int *)s->top->data);
 
     return val;

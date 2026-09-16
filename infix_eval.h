@@ -6,7 +6,7 @@
 
 int infix_evaluation(STACK *s , STACK *y , char *exp);
 
-int precedence(char *opr1 , char *opr2);
+int precedence(char opr1);
 
 int evaluate_exp(int *a , int *b , char *opr);
 

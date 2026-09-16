@@ -25,7 +25,7 @@ void stack_init(STACK *s);
 
 void push(STACK *stack , void *data , Type datatype);
 
-void *pop(STACK *stack , void *data);
+void *pop(STACK *stack);
 
 bool is_empty(const STACK *s);
 
