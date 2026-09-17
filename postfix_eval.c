@@ -35,18 +35,18 @@ int postfix_evaluation(STACK *s , char *exp){
                 data = exp[i] - '0';
             }
             
-            push(s , data , INT);
+            push(s , &data , INT);
             NODE *temp = s->top;
             while(temp != NULL){
-                printf("value = %d.\n",temp->data);
+                printf("value = %d.\n",*(int *)temp->data);
                 temp = temp->next;
             }
             
             //pop(s);
         }
         else if(exp[i] == '+' || exp[i] == '-' || exp[i] == '*' || exp[i] == '/'){
-            int op1 = pop(s);
-            int op2 = pop(s);
+            int op1 = *(int *)pop(s);
+            int op2 = *(int *)pop(s);
 
             if(op1 == -1){
                 op1 = 0;
@@ -59,14 +59,15 @@ int postfix_evaluation(STACK *s , char *exp){
 
             int result = evaluate(op1 , op2 , exp[i]);
             printf("result = %d.\n",result);
-            push(s , result);
+            push(s , &result , INT);
         }
         else if(exp[i] == ' '){
             continue;
         }
         
     }
-    return s->top->data;
+    int val = *(int *)s->top->data;
+    return val;
 }
 
 int main(){
