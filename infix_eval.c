@@ -115,7 +115,7 @@ int main(){
     stack_init(&s);
     stack_init(&y);
 
-    char *exp = "((2+3)*5)";
+    char *exp = "((100/2)*5)";
 
     int value = infix_evaluation(&s , &y , exp);
 
