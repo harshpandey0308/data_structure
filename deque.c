@@ -56,8 +56,6 @@ bool pop_rear(deque *dq){
         return false;
     }
 
-    size_t rear = (dq->front + dq->size - 1)%CAPACITY;
-
     dq->size--;
 
     return true;
