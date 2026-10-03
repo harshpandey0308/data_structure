@@ -3,34 +3,38 @@
 
 using namespace std;
 
-int sum(int n);
-
-void reverse_string(string name ){
-    if(name == '\n'){
+void reverse_string(string& arr , int left , int right){
+    if(left >= right){
         return;
     }
 
-    reverse_string(name[i]);
+    reverse_string(arr , left+1 , right-1);
+    char temp = arr[left];
+    arr[left] = arr[right];
+    arr[right] = temp;
+}
 
-    cout<<"the reversed string is "<<name<<'\n';
+long long fibonacci(int num){
+    if(num <= 1){
+       //cout<<num<<'\n';
+       return num;   
+    }
+    
+    return fibonacci(num-1) + fibonacci(num-2);
 }
 
 int main(){
-    int result = sum(5);
+    string arr = "HARSHA";
 
-    cout<<"the sum of first five number : "<<result<<'\n';
+    reverse_string(arr , 0 , arr.length()-1);
 
-    reverse_string("harsh");
-
-    return 0;
-}
-
-int sum(int n){
-    if(n <= 0){
-        return 0;
+    for(char s : arr){
+        cout<<s<<'\n';
     }
 
-    int s = n;
+    long long result = fibonacci(5);
 
-    return (s + sum(n-1));
+    cout<<"result"<<" "<<result<<'\n';
+
+    return 0;
 }
