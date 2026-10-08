@@ -55,6 +55,28 @@ class BST{
             }
         }
 
+        bool search(NODE *current , int target){
+            if(current == NULL){
+                cout<<"No elements in the tree"<<endl;
+                return false;
+            }
+
+            if(current->value == target){
+                cout<<"target found"<<'\n';
+                return true;
+            }
+            else if(current->value > target){
+                return search(current->left , target);
+            }
+            else if(current->value < target){
+                return search(current->right , target);
+            }
+            else{
+                cout<<"target not found"<<'\n';
+                return false;
+            }
+        }
+
         void print(NODE *temp){
             if(temp == NULL){
                 return;
@@ -89,6 +111,14 @@ int main(){
     b1.insert(b1.root , 8);
     b1.insert(b1.root , 10);
     b1.insert(b1.root , 7);
+    b1.insert(b1.root , 34);
+    b1.insert(b1.root , 4);
 
     b1.print(b1.root);
+
+    b1.search(b1.root , 7);
+    b1.search(b1.root , 34);
+    b1.search(b1.root , 23);
+    b1.search(b1.root , 10);
+
 }
