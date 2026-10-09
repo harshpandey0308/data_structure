@@ -77,6 +77,40 @@ class BST{
             }
         }
 
+        bool deletion(NODE *current , int target){
+            if(current == NULL){
+                cout<<"deletion is stopped , tree is empty";
+                return false;
+            }
+
+            NODE *parent = NULL;
+            while(current != NULL){
+
+                if(current->value == target && current->left == NULL && current->right == NULL){
+                  delete current;
+                  current = NULL;
+                  if(target < parent->value){
+                    parent->left = NULL;
+                  }
+                  else{
+                    parent->right = NULL;
+                  }
+                  cout<<"deletion completed"<<endl;
+                  return true;
+                }
+                else if(current->value < target){
+                    parent = current;
+                    current = current->right;
+                }
+                else{
+                    parent = current;
+                    current = current->left;
+                }
+            }
+
+            return false;
+        }
+
         void print(NODE *temp){
             if(temp == NULL){
                 return;
@@ -121,4 +155,10 @@ int main(){
     b1.search(b1.root , 23);
     b1.search(b1.root , 10);
 
+
+    b1.deletion(b1.root , 34);
+
+    b1.print(b1.root);
+
+    return 0;
 }
