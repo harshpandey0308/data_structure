@@ -86,17 +86,46 @@ class BST{
             NODE *parent = NULL;
             while(current != NULL){
 
-                if(current->value == target && current->left == NULL && current->right == NULL){
-                  delete current;
-                  current = NULL;
-                  if(target < parent->value){
+                if(current->value == target){
+                    if(current->left == NULL && current->right == NULL){
+                        delete current;
+                        current = NULL;
+                    }
+                    else if((current->left == NULL && current->right != NULL) || (current->right == NULL && current->left != NULL)){
+                        if(current->right != NULL){
+                            if(parent->value > current->value){
+                                parent->left = current->right;
+                                delete current;
+                                current = parent->left;
+                            }
+                            else{
+                                parent->right = current->right;
+                                delete current;
+                                current = parent->right;
+                            }
+                        }
+                        else{
+                            if(parent->value > current->value){
+                                parent->left = current->left;
+                                delete current;
+                                current = parent->left;
+                            }
+                            else{
+                                parent->right = current->left;
+                                delete current;
+                                current = parent->right;
+                            }
+                        }
+                    }
+
+                    if(target < parent->value){
                     parent->left = NULL;
-                  }
-                  else{
+                    }
+                    else{
                     parent->right = NULL;
-                  }
-                  cout<<"deletion completed"<<endl;
-                  return true;
+                    }
+                    cout<<"deletion completed"<<endl;
+                    return true;
                 }
                 else if(current->value < target){
                     parent = current;
