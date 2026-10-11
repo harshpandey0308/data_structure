@@ -90,6 +90,13 @@ class BST{
                     if(current->left == NULL && current->right == NULL){
                         delete current;
                         current = NULL;
+
+                        if(target < parent->value){
+                            parent->left = NULL;
+                        }
+                        else{
+                            parent->right = NULL;
+                        }
                     }
                     else if((current->left == NULL && current->right != NULL) || (current->right == NULL && current->left != NULL)){
                         if(current->right != NULL){
@@ -117,13 +124,21 @@ class BST{
                             }
                         }
                     }
-
-                    if(target < parent->value){
-                    parent->left = NULL;
-                    }
                     else{
-                    parent->right = NULL;
+                        NODE *temp = current->right;
+
+                        while(temp->left != NULL){
+                            temp = temp->left;
+                        }
+
+                        NODE *temp1 = current;
+                        current = temp;
+                        delete temp1;
+                        temp1 = NULL;
+                        temp = NULL;
                     }
+
+                    
                     cout<<"deletion completed"<<endl;
                     return true;
                 }
@@ -173,6 +188,7 @@ int main(){
 
     b1.insert(b1.root , 8);
     b1.insert(b1.root , 10);
+    b1.insert(b1.root , 9);
     b1.insert(b1.root , 7);
     b1.insert(b1.root , 34);
     b1.insert(b1.root , 4);
@@ -185,7 +201,7 @@ int main(){
     b1.search(b1.root , 10);
 
 
-    b1.deletion(b1.root , 34);
+    b1.deletion(b1.root , 10);
 
     b1.print(b1.root);
 
