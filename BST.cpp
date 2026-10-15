@@ -77,85 +77,77 @@ class BST{
             }
         }
 
-        int inorder_successor(NODE *current){
+        NODE *inorder_successor(NODE *current){
             if(current == NULL){
                 cout<<"tree is empty"<<'\n';
-                return -1;
+                return NULL;
             }
 
             NODE *temp = current->right;
-            while(temp != NULL){
-                if(temp->left == NULL && (temp->right == NULL || temp->right != NULL)){
-                    return temp->value;
-                }
-                else if(temp->left != NULL){
-                    temp = temp->left;
-                }
+            if(temp == NULL){
+                return NULL;
             }
-            cout<<"NO successor"<<'\n';
-            return -1;
+            while(temp->left != NULL){
+                temp = temp->left;
+            }
+            
+            return temp;
         }
 
-        bool deletion(NODE *current , int target){
+        NODE *inorder_predecessor(NODE* current){
             if(current == NULL){
-                cout<<"deletion is stopped , tree is empty";
-                return false;
+                return current;
             }
 
-            if(current == root && current->left == NULL && current->right == NULL){
-                delete current;
-                current = NULL;
+            NODE *temp = current->left;
+            if(temp == NULL){
+                return temp;
+            }
+            while(temp->right != NULL){
+                temp = temp->right;
             }
 
-            NODE *parent = current;
-            while(current != NULL){
-                if(current->value == target){
-                    if(current->left == NULL && current->right == NULL){
-                        delete current;
-                        current = NULL;
+            return temp;
+        }
 
-                        if(parent->value > target){
-                            parent->left = NULL;
-                        }
-                        else{
-                            parent->right = NULL;
-                        }
-                    }
-                    else if(current->left == NULL && current->right != NULL){
-                        if(parent->value > target){
-                            parent->left = current->right;
-                        }
-                        else{
-                            parent->right = current->right;
-                        }
-                        delete current;
-                        current = NULL;
-                    }
-                    else if(current->left != NULL && current->right == NULL){
-                        if(parent->value > target){
-                            parent->left = current->left;
-                        }
-                        else{
-                            parent->right = current->left;
-                        }
-                        delete current;
-                        current = NULL;
-                    }
-                    
+        NODE *delete_(NODE *current , int target){
+            if(current == NULL){
+                return current;
+            }
 
+            if(current->value == target){
+                if(current->left == NULL && current->right == NULL){
+                    delete current;
+                    return NULL;
                 }
-                else if(current->value > target){
-                    parent = current;
-                    current = current->left;
+                else if(current->left != NULL && current->right == NULL){
+                    NODE *temp = current->left;
+                    delete current;
+                    return temp;
+                }
+                else if(current->left == NULL && current->right != NULL){
+                    NODE *temp = current->right;
+                    delete current;
+                    return temp;
                 }
                 else{
-                    parent = current;
-                    current = current->right;
+                    NODE *succ = inorder_successor(current);
+                    current->value = succ->value;
+                    current->right = delete_(current->right , succ->value);       
+                    return current;
                 }
             }
+            else if(current->value < target){
+                current->right = delete_(current->right , target);
+                return current;
+            }
+            else{
+                current->left = delete_(current->left , target);
+                return current;
+            }
 
-            return false;
         }
+        
 
         void print(NODE *temp){
             if(temp == NULL){
@@ -202,9 +194,14 @@ int main(){
     b1.search(b1.root , 23);
     b1.search(b1.root , 10);
 
+    b1.root = b1.delete_(b1.root , 10);
+    b1.root = b1.delete_(b1.root , 4);
+    b1.root = b1.delete_(b1.root , 34);
 
-    int successor = b1.inorder_successor(b1.root);
+    int successor = b1.inorder_successor(b1.root)->value;
+    int predecessor = b1.inorder_predecessor(b1.root)->value;
     cout<<"successor = "<<successor<<'\n';
+    cout<<"predecessor = "<<predecessor<<'\n';
 
     b1.print(b1.root);
 
