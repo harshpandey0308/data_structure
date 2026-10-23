@@ -147,6 +147,17 @@ class BST{
             }
 
         }
+
+        int tree_height(NODE *current){
+            
+
+            int left_height = tree_height(current->left);
+            int right_height = tree_height(current->right);
+        }
+
+        void Balance_tree(NODE *current){
+
+        }
         
 
         void print(NODE *temp){
