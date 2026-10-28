@@ -9,10 +9,10 @@ class BBST{
             struct NODE *left;
             struct NODE *right; 
        }NODE;
-
-       NODE *root = NULL;
     
     public : 
+        NODE *root = NULL;
+
         NODE *_init_tree(){
             NODE *new_ = new NODE();
             new_->left = NULL;
@@ -21,45 +21,30 @@ class BBST{
             return new_;
         }
 
-        int *height(NODE *current){
-            if(current == NULL){
-                return NULL;
-            }
-
-            int *heights = new int(0);
-
-            if(height == NULL){
-                cout<<"Invalid memory"<<'\n';
-                exit(EXIT_FAILURE);
-            }
-
-            if(current->right == NULL && current->left == NULL){
-                return height;
-            }
-            else if(current->left != NULL && current->right == NULL){
-                heights = height(current->left);
-            }
-            else if(current->right != NULL && current->left == NULL){
-                heights = height(current->right);
+        int max_height(int *height1 , int *height2){
+            if(*height1 > *height2){
+                return *height1;
             }
             else{
-                int height1 = height(current->left);
-                if(height1 == NULL){
-                    exit(EXIT_FAILURE);
-                }
-
-                int height2 = height(current->right);
-                if(height2 == NULL){
-                    exit(exit_failure);
-                }
-
-                if(*height1 < *height2){
-                    return height2;
-                }
-                else{
-                    return height1;
-                }
+                return *height2;
             }
+        }
+
+        int height(NODE *current){
+            int height1 = -1;
+            int height2 = -1;
+            int height = 0;
+
+            if(current == NULL){
+                height = -1;
+                return height;
+            }
+        
+            height1 = height(current->right);
+            height2 = height(current->left);
+
+            height = 1 + max_height(&height1 , &height2);
+            return height;
 
         }
      
@@ -85,7 +70,7 @@ class BBST{
 
             int *left_height = NULL;
             left_height = height(current->left);
-            if(height == NULL){
+            if(left_height == NULL){
                 cout<<"invalid height"<<'\n';
                 exit(EXIT_FAILURE);
             }
@@ -107,4 +92,16 @@ class BBST{
                 cout<<"tree is not balanced"<<'\n';
             }
         }
+};
+
+int main(){
+    BBST b1;
+
+    b1.balance_insertion(b1.root , 34);
+    b1.balance_insertion(b1.root , 50);
+    b1.balance_insertion(b1.root , 60);
+
+    int heights = height(b1.root);
+    cout<<"height of the root = "<<heights<<endl;
+    return 0;
 }
