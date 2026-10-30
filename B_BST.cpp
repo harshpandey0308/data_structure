@@ -47,50 +47,50 @@ class BBST{
             return height;
 
         }
+
+        NODE *node_balancing(NODE *current){
+            if(current->right == NULL){
+                current->right = current;
+            
+            }
+        }
      
         NODE *balance_insertion(NODE *current , int value){
             if(root == NULL){
-               current = _init_tree();
-               current->value = value;
-               root = current;
-               return root;
+                root = _init_tree();
+                root->value = value;
+                return root;
             }
 
+            int left_height;
+            int right_height;
+
             if(current == NULL){
-               current = _init_tree();
-               current->value = value;
-               return current;
+                current = _init_tree();
+                current->value = value;
+                return current;
             }
             else if(current->value < value){
                 current->right = balance_insertion(current->right , value);
+                right_height = height(current->right);
             }
             else if(current->value > value){
                 current->left = balance_insertion(current->left , value);
+                left_height = height(current->left);
             }
 
-            int *left_height = NULL;
-            left_height = height(current->left);
-            if(left_height == NULL){
-                cout<<"invalid height"<<'\n';
-                exit(EXIT_FAILURE);
+            int balance_factor = left_height - right_height;
+
+            if(balance_factor <= -2 || balance_factor >= 2){
+                cout<<"The tree is unbalanced"<<endl;
+                if(balance_factor >= 2){
+                    cout<<"left heavy unbalanced tree"<<endl;
+                    
+                }
             }
 
-            int *right_height = NULL;
-            right_height = height(current->right);
-            if(right_height == NULL){
-                cout<<"invalid height"<<'\n';
-                exit(EXIT_FAILURE);
-            }
 
-            int balance_factor = *(left_height) - *(right_height);
-
-            if(-2 < balance_factor < 2){
-                cout<<"tree is balance";
-                return current;
-            }
-            else{
-                cout<<"tree is not balanced"<<'\n';
-            }
+            
         }
 };
 
