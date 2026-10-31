@@ -48,11 +48,20 @@ class BBST{
 
         }
 
-        NODE *node_balancing(NODE *current){
-            if(current->right == NULL){
-                current->right = current;
-            
-            }
+        NODE *right_rotation(NODE *current){
+            NODE *new_root = current->left;
+            current->left = new_root->right;
+            new_root->right = current;
+
+            return new_root;
+        }
+
+        NODE *left_rotation(NODE *current){
+            NODE *new_root = current->right;
+            current->right = new_root->left;
+            new_root->left = current;
+
+            return new_root;
         }
      
         NODE *balance_insertion(NODE *current , int value){
@@ -62,8 +71,8 @@ class BBST{
                 return root;
             }
 
-            int left_height;
-            int right_height;
+            int left_height = -1;
+            int right_height = -1;
 
             if(current == NULL){
                 current = _init_tree();
@@ -85,12 +94,14 @@ class BBST{
                 cout<<"The tree is unbalanced"<<endl;
                 if(balance_factor >= 2){
                     cout<<"left heavy unbalanced tree"<<endl;
-                    
+                    current = right_rotation(current);
+                }
+                else{
+                    cout<<"right heavy unbalanced tree"<<endl;
+                    current = left_rotation(current);
                 }
             }
 
-
-            
         }
 };
 
