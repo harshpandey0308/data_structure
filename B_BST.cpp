@@ -1,4 +1,5 @@
 #include<iostream>
+#include<vector>
 
 using namespace std;
 
@@ -6,6 +7,7 @@ class BBST{
     private : 
        typedef struct NODE{
             int value;
+            int height;
             struct NODE *left;
             struct NODE *right; 
        }NODE;
@@ -17,6 +19,7 @@ class BBST{
             NODE *new_ = new NODE();
             new_->left = NULL;
             new_->right = NULL;
+            new_->height = 0;
 
             return new_;
         }
@@ -33,18 +36,18 @@ class BBST{
         int height(NODE *current){
             int height1 = -1;
             int height2 = -1;
-            int height = 0;
+            int heights = 0;
 
             if(current == NULL){
                 height = -1;
-                return height;
+                return heights;
             }
         
             height1 = height(current->right);
             height2 = height(current->left);
 
-            height = 1 + max_height(&height1 , &height2);
-            return height;
+            heights = 1 + max_height(&height1 , &height2);
+            return heights;
 
         }
 
@@ -81,25 +84,20 @@ class BBST{
             }
             else if(current->value < value){
                 current->right = balance_insertion(current->right , value);
-                right_height = height(current->right);
             }
             else if(current->value > value){
                 current->left = balance_insertion(current->left , value);
-                left_height = height(current->left);
             }
+
+            left_height = height(current->left);
+            right_height = height(current->right);
+
+            current->height = 1 + max_height(&left_height , &right_height);
 
             int balance_factor = left_height - right_height;
 
-            if(balance_factor <= -2 || balance_factor >= 2){
-                cout<<"The tree is unbalanced"<<endl;
-                if(balance_factor >= 2){
-                    cout<<"left heavy unbalanced tree"<<endl;
-                    current = right_rotation(current);
-                }
-                else{
-                    cout<<"right heavy unbalanced tree"<<endl;
-                    current = left_rotation(current);
-                }
+            if(balance_factor < -1){
+               int child_bf = current->left->height;
             }
 
         }
