@@ -33,28 +33,29 @@ class BBST{
             }
         }
 
-        int height(NODE *current){
-            int height1 = -1;
-            int height2 = -1;
-            int heights = 0;
-
+        int _height(NODE *current){
             if(current == NULL){
-                height = -1;
-                return heights;
+                return -1;
             }
-        
-            height1 = height(current->right);
-            height2 = height(current->left);
 
-            heights = 1 + max_height(&height1 , &height2);
-            return heights;
+            return current->height;
+        }
 
+        void height_update(NODE *current){
+            int left_heights = _height(current->left);
+            int right_heights = _height(current->right);
+
+            current->height = 1 + max_height(&left_heights , &right_heights);
         }
 
         NODE *right_rotation(NODE *current){
             NODE *new_root = current->left;
             current->left = new_root->right;
             new_root->right = current;
+
+            height_update(current);
+
+            height_update(new_root);
 
             return new_root;
         }
@@ -64,16 +65,18 @@ class BBST{
             current->right = new_root->left;
             new_root->left = current;
 
+            height_update(current);
+
+            height_update(new_root);
+
             return new_root;
+        }
+
+        int balance_factor(NODE *current){
+            return (_height(current->left) - _height(current->right));
         }
      
         NODE *balance_insertion(NODE *current , int value){
-            if(root == NULL){
-                root = _init_tree();
-                root->value = value;
-                return root;
-            }
-
             int left_height = -1;
             int right_height = -1;
 
@@ -89,17 +92,33 @@ class BBST{
                 current->left = balance_insertion(current->left , value);
             }
 
-            left_height = height(current->left);
-            right_height = height(current->right);
+            left_height = _height(current->left);
+            right_height = _height(current->right);
 
             current->height = 1 + max_height(&left_height , &right_height);
 
-            int balance_factor = left_height - right_height;
+            int bf = balance_factor(current);
 
-            if(balance_factor < -1){
-               int child_bf = current->left->height;
+            if(bf > 1){
+                if(balance_factor(current->left) >= 0){
+                    current = right_rotation(current);
+                }
+                else{
+                    current->left = left_rotation(current->left);
+                    current = right_rotation(current);
+                }
+            }
+            else if(bf < -1){
+                if(balance_factor(current->right) <= 0){
+                    current = left_rotation(current);
+                }
+                else{
+                    current->right = right_rotation(current->right);
+                    current = left_rotation(current);
+                }
             }
 
+            return current;
         }
 };
 
