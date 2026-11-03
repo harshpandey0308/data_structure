@@ -11,9 +11,8 @@ class BBST{
             struct NODE *left;
             struct NODE *right; 
        }NODE;
-    
-    public : 
-        NODE *root = NULL;
+
+       NODE *root = NULL;
 
         NODE *_init_tree(){
             NODE *new_ = new NODE();
@@ -91,6 +90,9 @@ class BBST{
             else if(current->value > value){
                 current->left = balance_insertion(current->left , value);
             }
+            else{
+                return current;
+            }
 
             left_height = _height(current->left);
             right_height = _height(current->right);
@@ -120,16 +122,56 @@ class BBST{
 
             return current;
         }
+    
+    public : 
+        void insert(int value){
+            root = balance_insertion(root , value);
+        }
+
+        void inorder_tree(NODE *current){
+            if(current == NULL){
+                return;
+            }
+
+            inorder_tree(current->left);
+            cout<<current->value<<'\n';
+            inorder_tree(current->right);
+
+        }
+
+        void print_tree(){
+            inorder_tree(root);
+        }
+
+        void destroy_tree(NODE *current){
+            if(current == NULL){
+                return;
+            }
+
+            destroy_tree(current->left);
+            destroy_tree(current->right);
+
+            delete current;
+        }
+
+        ~BBST(){
+            destroy_tree(root);
+        }
 };
 
 int main(){
     BBST b1;
 
-    b1.balance_insertion(b1.root , 34);
-    b1.balance_insertion(b1.root , 50);
-    b1.balance_insertion(b1.root , 60);
+    b1.insert(50);
+    b1.insert(60);
+    b1.insert(100);
+    b1.insert(23);
+    b1.insert(34);
+    b1.insert(7);
+    b1.insert(3);
+    
+    b1.print_tree();
 
-    int heights = height(b1.root);
-    cout<<"height of the root = "<<heights<<endl;
     return 0;
+
 }
