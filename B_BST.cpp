@@ -1,5 +1,4 @@
 #include<iostream>
-#include<vector>
 
 using namespace std;
 
@@ -21,6 +20,23 @@ class BBST{
             new_->height = 0;
 
             return new_;
+        }
+
+        NODE *inorder_successor(NODE *current){
+            if(current == NULL){
+                cout<<"tree is empty"<<'\n';
+                return NULL;
+            }
+
+            NODE *temp = current->right;
+            if(temp == NULL){
+                return NULL;
+            }
+            while(temp->left != NULL){
+                temp = temp->left;
+            }
+            
+            return temp;
         }
 
         int max_height(int *height1 , int *height2){
@@ -122,10 +138,82 @@ class BBST{
 
             return current;
         }
+
+        NODE *delete_node(NODE *current , int value){
+            if(current == NULL){
+                return current;
+            }
+
+            if(current->value == value){
+               if(current->left == NULL && current->right == NULL){
+                delete current;
+                return NULL;
+               }
+               else if(current->left == NULL && current->right != NULL){
+                NODE *temp = current->right;
+                delete current;
+                return temp;
+               }
+               else if(current->right == NULL && current->left != NULL){
+                NODE *temp = current->left;
+                delete current;
+                return temp;
+               }
+               else{
+                NODE *succ = inorder_successor(current);
+                current->value = succ->value;
+                current->right = delete_node(current->right , succ->value);
+               }
+            }
+            else if(current->value > value){
+                current->left = delete_node(current->left , value);
+            }
+            else if(current->value < value){
+                current->right = delete_node(current->right , value);
+            }
+
+            int left_height = _height(current->left);
+            int right_height = _height(current->right);
+
+            current->height = 1 + max_height(&left_height , &right_height);
+
+            int bal_fac = balance_factor(current);
+
+            if(bal_fac < -1){
+                if(balance_factor(current->right) <= 0){
+                    current = left_rotation(current);
+                }
+                else{
+                    current->right = right_rotation(current->right);
+                    current = left_rotation(current);
+                }
+            }
+            else if(bal_fac > 1){
+                if(balance_factor(current->left) >= 0){
+                    current = right_rotation(current);
+                }
+                else{
+                    current->left = left_rotation(current->left);
+                    current = right_rotation(current);
+                }
+            }
+
+            return current;
+        }
     
     public : 
+        BBST() = default;
+
+        BBST(const BBST&) = delete;
+
+        BBST& operator=(const BBST&) = delete;
+
         void insert(int value){
             root = balance_insertion(root , value);
+        }
+
+        void node_deletion(int value){
+            root = delete_node(root , value);
         }
 
         void inorder_tree(NODE *current){
@@ -170,6 +258,13 @@ int main(){
     b1.insert(7);
     b1.insert(3);
     
+    b1.print_tree();
+
+    b1.node_deletion(23);
+    b1.node_deletion(50);
+
+    cout<<"Tree after deletion"<<endl;
+
     b1.print_tree();
 
     return 0;
