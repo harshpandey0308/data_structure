@@ -10,21 +10,46 @@ class RB_tree{
             NODE *left;
             NODE *right;
             char color;
+
+            public:
+                NODE(int val) : parent(nullptr) , value(val) , left(nullptr) , right(nullptr) , color('R'){}
         };
 
-        public:
-            NODE(int val) : parent(nullptr) , value(val) , left(nullptr) , right(nullptr) , color('R'){}
-
+        
         NODE *root = nullptr;
 
     public:
-        NODE *find_color(NODE *current){
-            NODE *temp = root;
-            while(temp->next != current){
-                temp = temp->next;
+        NODE *find_grandparent(NODE *parent){
+            if(parent == nullptr){
+                return nullptr;
             }
 
-            return temp;
+            return parent->parent;
+        }
+
+        NODE *find_uncle(NODE *current , NODE *grandparent){
+            if(grandparent->right == current->parent){
+                if(grandparent->left == nullptr){
+                    return nullptr;
+                }
+                return grandparent->left;
+            }
+            else{
+                if(grandparent->right == nullptr){
+                    return nullptr;
+                }
+                return grandparent->right;
+            }
+        }
+
+        void change_color(NODE *parent){
+            if(parent == nullptr){
+                return;
+            }
+
+            while(parent != root){
+
+            }
         }
 
         NODE *insert(NODE *current , int value){
@@ -45,8 +70,13 @@ class RB_tree{
             }
 
             
+            NODE *grandparent = find_grandparent(current->parent);
+            NODE *uncle = find_uncle(current , grandparent);
+
             if(current->color == 'R' && current->parent->color == 'R'){
-                if(current->parent->parent->righ)
+                if(uncle->color == 'R'){
+
+                }
             }
         }
 }
