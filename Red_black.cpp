@@ -32,6 +32,7 @@ class RB_tree{
                 if(grandparent->left == nullptr){
                     return nullptr;
                 }
+                
                 return grandparent->left;
             }
             else{
