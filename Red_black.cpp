@@ -43,14 +43,40 @@ class RB_tree{
             }
         }
 
-        void change_color(NODE *parent){
-            if(parent == nullptr){
+        void recoloring(NODE *current){
+            if(current == root){
                 return;
             }
+            NODE *uncle = find_uncle(current , current->parent->parent);
+            current->parent->color = 'B';
+            uncle->color = 'B';
+            
+            recoloring(current->parent);
+        }
 
-            while(parent != root){
+        NODE *right_rotation(NODE *current){
+            NODE *new_node = current->left;
+            current->left = new_node->left;
+            
+        }
 
+        NODE *rotation(NODE *current , NODE *grandparent){
+            NODE *parent = current->parent;
+            if(grandparent->left == parent && current == parent->left){
+                // LL CASE
+                
             }
+            else if(grandparent->left == parent && current == parent->right){
+                //L-R case
+            }
+            else if(grandparent->right == parent && current == parent->right){
+                // RR case
+            }
+            else if(grandparent->right == parent && current == parent->left){
+                // R-L case
+            }
+
+
         }
 
         NODE *insert(NODE *current , int value){
@@ -74,8 +100,14 @@ class RB_tree{
             NODE *grandparent = find_grandparent(current->parent);
             NODE *uncle = find_uncle(current , grandparent);
 
-            if(current->color == 'R' && current->parent->color == 'R'){
+            if(current->color == 'R' && current->parent->color == 'B'){
+                cout<<"No need to change color , tree is balanced"<<endl;
+            }
+            else if(current->color == 'R' && current->parent->color =='R'){
                 if(uncle->color == 'R'){
+                   recoloring(current);
+                }
+                if(uncle->color == 'B'){
 
                 }
             }
