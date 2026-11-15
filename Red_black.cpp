@@ -20,7 +20,6 @@ class RB_tree{
         
         NODE *root = nullptr;
 
-    public:
         NODE *find_grandparent(NODE *parent){
             if(parent == nullptr){
                 return nullptr;
@@ -75,8 +74,23 @@ class RB_tree{
         NODE *right_rotation(NODE *current){
             NODE *new_node = current->left;
             new_node->parent = current->parent;
+
+            if(new_node->parent != nullptr){
+               if(new_node->parent->left == current){
+                  new_node->parent->left = new_node;
+               }
+               else{
+                  new_node->parent->right = new_node;
+               }
+            }
+            
             current->parent = new_node;
             current->left = new_node->right;
+
+            if(current->left != nullptr){
+               current->left->parent = current;
+            }
+
             new_node->right = current;
             
             return new_node;
@@ -85,8 +99,14 @@ class RB_tree{
         NODE *left_rotation(NODE *current){
             NODE *new_node = current->right;
             new_node->parent = current->parent;
+            new_node->parent->left = new_node;
             current->parent = new_node;
             current->right = new_node->left;
+
+            if(current->right != nullptr){
+               current->right->parent = current;
+            }
+            
             new_node->left = current;
 
             return new_node;
@@ -109,7 +129,7 @@ class RB_tree{
                 parent = left_rotation(parent);
                 grandparent = right_rotation(grandparent);
 
-                swap_color(current , grandparent;)
+                swap_color(current , grandparent);
             }
             else if(grandparent->right == parent && current == parent->right){
                 grandparent = left_rotation(grandparent);
@@ -124,9 +144,6 @@ class RB_tree{
         }
 
         NODE *insert(NODE *current , int value){
-            NODE *grandparent = find_grandparent(current->parent);
-            NODE *uncle = find_uncle(current , grandparent);
-            
             if(current == nullptr){
                 current = new NODE(value);
                 if(current == root){
@@ -134,7 +151,11 @@ class RB_tree{
                 }
                 return current;
             }
-            else if(current->value < value){
+
+            NODE *grandparent = find_grandparent(current->parent);
+            NODE *uncle = find_uncle(current , grandparent);
+            
+            if(current->value < value){
                 current->right = insert(current->right , value);
                 current->right->parent = current;
             }
@@ -148,11 +169,61 @@ class RB_tree{
             }
             else if(current->color == 'R' && current->parent->color =='R'){
                 if(uncle == nullptr || uncle->color == 'B'){
-                   rotation(current);
+                   rotation(current , grandparent);
                 }
                 else{
                    recoloring(current);
                 }
             }
+
+            return current;
         }
+
+        void destroy(NODE *current){
+            if(current == nullptr){
+                return;
+            }
+            destroy(current->left);
+            destroy(current->right);
+            delete current;
+        }
+
+        void display(NODE *temp){
+            NODE *current = temp;
+
+            if(current == nullptr){
+                return;
+            }
+
+            display(current->left);
+            cout<<current->value;
+            display(current->right);
+        }
+
+    public : 
+        void insert_val(int value){
+            this->root = insert(root , value);
+        }
+
+        void print_tree(){
+            display(root);
+        }
+
+        ~RB_tree(){
+            destroy(root);
+        }
+};
+
+int main(){
+    RB_tree t1;
+
+    t1.insert_val(89);
+    t1.insert_val(67);
+    t1.insert_val(45);
+    t1.insert_val(32);
+    t1.insert_val(99);
+
+    t1.print_tree();
+
+    return 0;
 }
