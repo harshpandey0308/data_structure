@@ -72,41 +72,61 @@ class RB_tree{
         }
 
         NODE *right_rotation(NODE *current){
+            if(current == nullptr || current->left == nullptr){
+                return nullptr;
+            }
+
             NODE *new_node = current->left;
             new_node->parent = current->parent;
-
-            if(new_node->parent != nullptr){
-               if(new_node->parent->left == current){
-                  new_node->parent->left = new_node;
-               }
-               else{
-                  new_node->parent->right = new_node;
-               }
+            if(current == root){
+                root = new_node;
             }
-            
-            current->parent = new_node;
+            else{
+                if(current->parent->left == current){
+                    current->parent->left = new_node;
+                }
+                else{
+                    current->parent->right = new_node;
+                }
+            }
+
             current->left = new_node->right;
-
             if(current->left != nullptr){
-               current->left->parent = current;
+                current->left->parent = current;
             }
 
+            current->parent = new_node;
             new_node->right = current;
-            
+
             return new_node;
         }
 
         NODE *left_rotation(NODE *current){
+            if(current == nullptr || current->right == nullptr){
+                return nullptr;            
+            }
+
             NODE *new_node = current->right;
             new_node->parent = current->parent;
-            new_node->parent->left = new_node;
-            current->parent = new_node;
-            current->right = new_node->left;
 
-            if(current->right != nullptr){
-               current->right->parent = current;
+            if(current == root){
+                root = new_node;
             }
-            
+            else{
+                if(current->parent->right == current){
+                    current->parent->right = new_node;
+                }
+                else{
+                    current->parent->left = new_node;
+                }
+            }
+
+            current->right = new_node->left;
+            if(current->right != nullptr){
+                current->right->parent = current;
+            }
+
+            current->parent = new_node;
             new_node->left = current;
 
             return new_node;
@@ -154,6 +174,7 @@ class RB_tree{
 
             NODE *grandparent = find_grandparent(current->parent);
             NODE *uncle = find_uncle(current , grandparent);
+
             
             if(current->value < value){
                 current->right = insert(current->right , value);
