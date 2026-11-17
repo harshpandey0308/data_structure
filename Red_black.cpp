@@ -65,6 +65,9 @@ class RB_tree{
             }
 
             current->parent->color = 'B';
+            if(uncle == nullptr){
+                gp->color = 'R';
+            }
             uncle->color = 'B';
             gp->color = 'R';
             
@@ -140,6 +143,9 @@ class RB_tree{
         }
 
         void rotation(NODE *current , NODE *grandparent){
+            if(current == nullptr || grandparent == nullptr){
+                return ;
+            }
             NODE *parent = current->parent;
             if(grandparent->left == parent && current == parent->left){
                 grandparent = right_rotation(grandparent);
@@ -185,7 +191,11 @@ class RB_tree{
                 current->left->parent = current;
             }
 
-            if(current->color == 'R' && current->parent->color == 'B'){
+            if(current->parent == nullptr){
+                cout<<"no need to change color"<<endl;
+                cout<<"tree is balanced"<<endl;
+            }
+            else if(current->color == 'R' && current->parent->color == 'B'){
                 cout<<"No need to change color , tree is balanced"<<endl;
             }
             else if(current->color == 'R' && current->parent->color =='R'){
