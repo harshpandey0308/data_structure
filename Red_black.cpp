@@ -48,13 +48,11 @@ class RB_tree{
             }
         }
 
-        void recoloring(NODE *current){
+        void recoloring(NODE *current , NODE *uncle){
             NODE *gp = find_grandparent(current->parent);
             if(gp == nullptr){
                 return;
             }
-
-            NODE *uncle = find_uncle(current , gp); // assumming that uncle can never be nullptr during coloring
 
             if(current == root){
                 return;
@@ -65,13 +63,13 @@ class RB_tree{
             }
 
             current->parent->color = 'B';
-            if(uncle == nullptr){
-                gp->color = 'R';
-            }
             uncle->color = 'B';
             gp->color = 'R';
             
-            recoloring(gp);
+            NODE *new_gp = find_grandparent(gp->parent);
+            NODE *new_unlce = find_uncle(gp , new_gp);
+            
+            recoloring(gp , new_unlce);
         }
 
         NODE *right_rotation(NODE *current){
@@ -169,27 +167,9 @@ class RB_tree{
             }
         }
 
-        NODE *insert(NODE *current , int value){
-            if(current == nullptr){
-                current = new NODE(value);
-                if(current == root){
-                    current->color = 'B';
-                }
-                return current;
-            }
-
+        void tree_fixup(NODE *current){
             NODE *grandparent = find_grandparent(current->parent);
             NODE *uncle = find_uncle(current , grandparent);
-
-            
-            if(current->value < value){
-                current->right = insert(current->right , value);
-                current->right->parent = current;
-            }
-            else if(current->value > value){
-                current->left = insert(current->left , value);
-                current->left->parent = current;
-            }
 
             if(current->parent == nullptr){
                 cout<<"no need to change color"<<endl;
@@ -203,8 +183,30 @@ class RB_tree{
                    rotation(current , grandparent);
                 }
                 else{
-                   recoloring(current);
+                   recoloring(current , uncle);
                 }
+            }
+        }
+
+        NODE *insert(NODE *current , int value){
+            if(current == nullptr){
+                current = new NODE(value);
+
+                if(root == nullptr){
+                    root = current;
+                    current->color = 'B';
+                }  // 89 , 67 , 45 , 32 , 99
+
+                return current;
+            }
+            
+            if(current->value < value){
+                current->right = insert(current->right , value);
+                current->right->parent = current;
+            }
+            else if(current->value > value){
+                current->left = insert(current->left , value);
+                current->left->parent = current;
             }
 
             return current;
@@ -234,6 +236,21 @@ class RB_tree{
     public : 
         void insert_val(int value){
             this->root = insert(root , value);
+
+            NODE *tmp = root;
+            while(tmp != nullptr){
+                if(tmp->value == value && tmp->right == nullptr && tmp->left == nullptr){
+                    break;
+                }
+                else if(tmp->value < value){
+                    tmp = tmp->right;
+                }
+                else{
+                    tmp = tmp->left;
+                }
+            }
+
+            tree_fixup(tmp);
         }
 
         void print_tree(){
